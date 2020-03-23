@@ -1,0 +1,70 @@
+#+TITLE: Correctness of Concurrent Programs and TLA+
+#+AUTHOR: Sean Cribbs
+#+EMAIL: seancribbs@gmail.com
+
+#+OPTIONS: reveal_center:t reveal_progress:t reveal_history:nil reveal_control:t
+#+OPTIONS: reveal_rolling_links:t reveal_keyboard:t reveal_overview:t num:nil
+#+OPTIONS: reveal_width:1200 reveal_height:800
+#+OPTIONS: toc:nil
+#+REVEAL_MARGIN: 0.1
+#+REVEAL_MIN_SCALE: 0.5
+#+REVEAL_MAX_SCALE: 2.5
+#+REVEAL_TRANS: cube
+#+REVEAL_THEME: sky
+#+REVEAL_HLEVEL: 2
+#+REVEAL_PLUGINS: (notes highlight)
+#+REVEAL_ROOT: http://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/
+
+* We write concurrent programs in Elixir
+  We spawn processes, send and receive messages, and expect things to be
+  asynchronous
+** Have you ever accidentally...
+   #+ATTR_REVEAL: :frag (appear)
+   - experienced a race-condition
+   - caused a deadlock between two GenServers
+   - created a collection of processes that didn't work
+** How do you know if your Elixir program works?
+   #+ATTR_REVEAL: :frag (appear)
+   - Unit tests?
+   - Property tests?
+   - Static checking? (dialyzer, etc)
+** Limitations of testing
+   #+ATTR_REVEAL: :frag (appear)
+   - Tests are constrained by your imagination
+   - Tests check your implementation, not your design
+* Correctness
+** How can you tell if your design is correct?
+   #+ATTR_REVEAL: :frag (appear)
+   - Choose the properties you want to be true
+   - Check the design via formal methods
+** Properties?
+   Two kinds tend to specify concurrent systems:
+   #+ATTR_REVEAL: :frag (appear)
+   - Safety
+   - Liveness
+*** Safety properties
+    Conditions that must always hold, guarantees that /bad things don't happen/:
+    #+ATTR_REVEAL: :frag (appear)
+    - atomicity
+    - integrity
+*** Liveness properties
+    Conditions that must eventually hold, guarantees that /good things
+    eventually happen/:
+    #+ATTR_REVEAL: :frag (appear)
+    - termination
+    - deadlock-freedom
+    - starvation-freedom
+    - "eventual consistency"
+*** Example - Connection pool
+    Think =poolboy= or =db_connection=. What properties should we have?
+    #+ATTR_REVEAL: :frag (appear)
+    - *Isolation* (safety) - at most one process can have each connection checked
+      out
+    - *Starvation-freedom* (liveness) - every process requesting a connection
+      eventually gets one
+** Formal Methods
+   A broad range of techniques focused on mathematical soundness. Usually
+   involve specialized logics and notations.
+*** TLA+
+    Temporal Logic of Actions - describes concurrent and distributed systems
+*** 
