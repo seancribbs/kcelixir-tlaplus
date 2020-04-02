@@ -1,0 +1,7 @@
+digraph G {
+  rankdir = "LR";
+  ranksep = 1.0;
+  idle [style="bold"];
+  idle -> claimed [label="checkout"];
+  claimed -> idle [label="checkin"];
+}

@@ -1,20 +1,18 @@
-#+TITLE: Correctness of Concurrent Programs and TLA+
+#+TITLE: Introduction to TLA+
 #+AUTHOR: Sean Cribbs
 #+EMAIL: seancribbs@gmail.com
 
 #+OPTIONS: reveal_center:t reveal_progress:t reveal_history:nil reveal_control:t
 #+OPTIONS: reveal_rolling_links:t reveal_keyboard:t reveal_overview:t num:nil
-#+OPTIONS: reveal_width:1200 reveal_height:800
 #+OPTIONS: toc:nil
-#+REVEAL_MARGIN: 0.1
-#+REVEAL_MIN_SCALE: 0.5
-#+REVEAL_MAX_SCALE: 2.5
 #+REVEAL_TRANS: cube
-#+REVEAL_THEME: sky
+#+REVEAL_THEME: night
 #+REVEAL_HLEVEL: 2
 #+REVEAL_PLUGINS: (notes highlight)
 #+REVEAL_ROOT: http://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/
-
+#+REVEAL_TITLE_SLIDE: <h1 class="title" style="font-size: 3.5em">%t</h1><h2 class="author">%a</h2><p><img src="kcelixir-logo.jpeg" style="vertical-align: middle; height: 2em" /> April 2, 2020</p>
+#+REVEAL_TITLE_SLIDE_BACKGROUND: #55316e
+#+REVEAL_DEFAULT_SLIDE_BACKGROUND: #55316e
 * We write concurrent programs in Elixir
   We spawn processes, send and receive messages, and expect things to be
   asynchronous
@@ -32,7 +30,10 @@
    #+ATTR_REVEAL: :frag (appear)
    - Tests are constrained by your imagination
    - Tests check your implementation, not your design
-* Correctness
+* Designing for Correctness
+  #+BEGIN_QUOTE
+  If the design is broken, then the code is almost certainly broken.
+  #+END_QUOTE
 ** How can you tell if your design is correct?
    #+ATTR_REVEAL: :frag (appear)
    - Choose the properties you want to be true
@@ -47,13 +48,14 @@
     #+ATTR_REVEAL: :frag (appear)
     - atomicity
     - integrity
+    - mutual-exclusion
 *** Liveness properties
     Conditions that must eventually hold, guarantees that /good things
     eventually happen/:
     #+ATTR_REVEAL: :frag (appear)
     - termination
-    - deadlock-freedom
-    - starvation-freedom
+    - deadlock-freedom*
+    - starvation-freedom*
     - "eventual consistency"
 *** Example - Connection pool
     Think =poolboy= or =db_connection=. What properties should we have?
@@ -63,8 +65,111 @@
     - *Starvation-freedom* (liveness) - every process requesting a connection
       eventually gets one
 ** Formal Methods
-   A broad range of techniques focused on mathematical soundness. Usually
-   involve specialized logics and notations.
-*** TLA+
-    Temporal Logic of Actions - describes concurrent and distributed systems
-*** 
+   A broad range of techniques focused on:
+   #+ATTR_REVEAL: :frag (appear)
+   - *precision*
+   - *broad scope*
+   - mathematical *soundness*
+   - usually involve specialized logics / notations
+*** A few kinds of Formal Methods
+    #+ATTR_REVEAL: :frag (appear)
+    - First-Order Logic + Model checker (Alloy, SPIN)
+    - Satisfiability Modulo Theory solvers - (Z3, MiniSMT)
+    - Symbolic/higher-order logic + Proof assistants (Coq, Isabelle)
+** TLA+ - Temporal Logic of Actions
+   #+ATTR_REVEAL: :frag (appear)
+   - Logic of booleans, integers, sequences, sets, and functions
+   - Specifications as state machines (states and transitions)
+   - Verified with TLC Model Checker, or proven with TLA Proof System
+*** Leslie Lamport
+    [[http://lamport.azurewebsites.net/leslie.jpg]]
+
+    Time/Clocks, Byzantine Generals, LaTeX, TLA+, Paxos
+** Modeling a single resource
+   [[./conn-pool.dot.png]]
+   #+ATTR_REVEAL: :frag (appear)
+   What properties do we already have?
+   #+BEGIN_NOTES
+   - start idle
+   - in order to checkout, must be in the idle state
+   - once checked out, in claimed state
+   - can't checkout again from claimed
+   - in order to checkin, must be in claimed state
+   - can't checkin again from idle
+   #+END_NOTES
+*** Starting a specification
+    #+BEGIN_SRC tlaplus
+    VARIABLES resState
+
+    Init == resState = "idle"
+    #+END_SRC
+*** Adding state-transitions (actions)
+    #+BEGIN_SRC tlaplus
+    Checkout == resState = "idle" /\ resState' = "claimed"
+
+    Checkin == resState = "claimed" /\ resState' = "idle"
+
+    Next == Checkout \/ Checkin
+    #+END_SRC
+
+    =resState'= means =resState= in the next step.
+*** Completing the specification (temporal formula)
+    #+BEGIN_SRC tlaplus
+    vars == << resState >>
+
+    Spec == Init /\ [][Next]_vars
+    #+END_SRC
+*** Additional invariant
+    Sometimes you want safety properties beyond your state-transition behavior.
+    #+ATTR_REVEAL: :frag (appear)
+    #+BEGIN_SRC tlaplus
+    StatesOK == resState \in {"idle", "claimed"}
+    #+END_SRC
+
+*** Summary
+    #+ATTR_REVEAL: :frag (appear)
+    - Describe the contents of each state
+    - Write state-transitions (actions)
+    - Combine actions into one =Next= step
+    - Join initial with next into the spec
+
+*** Checking the specification
+    TLC Model Checker
+    #+ATTR_REVEAL: :frag (appear)
+    - Set up formulas, invariants, and constants to check
+    - Explore the state space and discover inconsistencies
+
+** Demo
+   A larger version of this spec, and checking it
+
+* Benefits of TLA+ and Formal Methods
+  - Get design right
+  - Gain better understanding
+  - Write better code
+
+* Thank you!
+  Slides: https://github.com/seancribbs/kcelixir-tlaplus
+
+** References
+   https://lamport.azurewebsites.net/tla/safety-liveness.pdf
+   https://www.apress.com/gp/book/9781484238288
+   http://lamport.azurewebsites.net/video/videos.html
+   https://cacm.acm.org/magazines/2015/4/184701-how-amazon-web-services-uses-formal-methods/
+   https://github.com/ongardie/raft.tla
+
+* Extra slides
+*** Safety More formally...
+    #+BEGIN_QUOTE
+    If a behavior /b/ doesn’t satisfy a safety property P, then there is some
+    shortest prefix /s^min/ of /b/ that doesn’t satisfy P.
+    #+END_QUOTE
+*** Another way to think of...
+    #+BEGIN_QUOTE
+    a safety property is as a property that, if it’s violated, we can point to
+    a place in the behavior where it’s violated
+    #+END_QUOTE
+*** Liveness More formally...
+    #+BEGIN_QUOTE
+    A property P is defined to be a liveness property iff every finite sequence
+    of states can be extended to a behavior that satisfies P.
+    #+END_QUOTE
