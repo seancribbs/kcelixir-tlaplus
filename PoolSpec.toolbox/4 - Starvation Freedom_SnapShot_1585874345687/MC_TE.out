@@ -1,0 +1,224 @@
+@!@!@STARTMSG 2262:0 @!@!@
+TLC2 Version 2.14 of 10 July 2019
+@!@!@ENDMSG 2262 @!@!@
+@!@!@STARTMSG 2187:0 @!@!@
+Running breadth-first search Model-Checking with fp 28 and seed -4805621002065175744 with 6 workers on 12 cores with 2428MB heap and 5460MB offheap memory [pid: 29649] (Mac OS X 10.15.3 x86_64, AdoptOpenJDK 11.0.3 x86_64, OffHeapDiskFPSet, DiskStateQueue).
+@!@!@ENDMSG 2187 @!@!@
+@!@!@STARTMSG 2220:0 @!@!@
+Starting SANY...
+@!@!@ENDMSG 2220 @!@!@
+Parsing file /Users/seancribbs/code/tlaplus/Connection Pool/PoolSpec.toolbox/4 - Starvation Freedom/MC.tla
+Parsing file /Users/seancribbs/code/tlaplus/Connection Pool/PoolSpec.toolbox/4 - Starvation Freedom/PoolSpec.tla
+Parsing file /Applications/TLA+ Toolbox.app/Contents/Eclipse/plugins/org.lamport.tlatools_1.0.0.201907102009/tla2sany/StandardModules/TLC.tla
+Parsing file /Applications/TLA+ Toolbox.app/Contents/Eclipse/plugins/org.lamport.tlatools_1.0.0.201907102009/tla2sany/StandardModules/Naturals.tla
+Parsing file /Applications/TLA+ Toolbox.app/Contents/Eclipse/plugins/org.lamport.tlatools_1.0.0.201907102009/tla2sany/StandardModules/Sequences.tla
+Parsing file /Applications/TLA+ Toolbox.app/Contents/Eclipse/plugins/org.lamport.tlatools_1.0.0.201907102009/tla2sany/StandardModules/FiniteSets.tla
+Semantic processing of module PoolSpec
+Semantic processing of module Naturals
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module TLC
+Semantic processing of module MC
+@!@!@STARTMSG 2219:0 @!@!@
+SANY finished.
+@!@!@ENDMSG 2219 @!@!@
+@!@!@STARTMSG 2185:0 @!@!@
+Starting... (2020-04-02 19:39:03)
+@!@!@ENDMSG 2185 @!@!@
+@!@!@STARTMSG 2279:3 @!@!@
+Declaring symmetry during liveness checking is dangerous. It might cause TLC to miss violations of the stated liveness properties. Please check liveness without symmetry defined.
+@!@!@ENDMSG 2279 @!@!@
+@!@!@STARTMSG 2212:0 @!@!@
+Implied-temporal checking--satisfiability problem has 1 branches.
+@!@!@ENDMSG 2212 @!@!@
+@!@!@STARTMSG 2189:0 @!@!@
+Computing initial states...
+@!@!@ENDMSG 2189 @!@!@
+@!@!@STARTMSG 2190:0 @!@!@
+Finished computing initial states: 1 distinct state generated at 2020-04-02 19:39:04.
+@!@!@ENDMSG 2190 @!@!@
+@!@!@STARTMSG 2200:0 @!@!@
+Progress(4) at 2020-04-02 19:39:04: 26 states generated, 6 distinct states found, 0 states left on queue.
+@!@!@ENDMSG 2200 @!@!@
+@!@!@STARTMSG 2192:0 @!@!@
+Checking temporal properties for the complete state space with 6 total distinct states at (2020-04-02 19:39:04)
+@!@!@ENDMSG 2192 @!@!@
+@!@!@STARTMSG 2116:1 @!@!@
+Temporal properties were violated.
+
+@!@!@ENDMSG 2116 @!@!@
+@!@!@STARTMSG 2264:1 @!@!@
+The following behavior constitutes a counter-example:
+
+@!@!@ENDMSG 2264 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+1: <Initial predicate>
+/\ leases = (c1 :> {} @@ c2 :> {})
+/\ resState = (r1 :> "idle" @@ r2 :> "idle" @@ r3 :> "idle")
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+2: <Checkout line 31, col 19 to line 33, col 74 of module PoolSpec>
+/\ leases = (c1 :> {r1} @@ c2 :> {})
+/\ resState = (r1 :> "claimed" @@ r2 :> "idle" @@ r3 :> "idle")
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+3: <Checkout line 31, col 19 to line 33, col 74 of module PoolSpec>
+/\ leases = (c1 :> {r1} @@ c2 :> {r2})
+/\ resState = (r1 :> "claimed" @@ r2 :> "claimed" @@ r3 :> "idle")
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+4: <Checkout line 31, col 19 to line 33, col 74 of module PoolSpec>
+/\ leases = (c1 :> {r1, r3} @@ c2 :> {r2})
+/\ resState = (r1 :> "claimed" @@ r2 :> "claimed" @@ r3 :> "claimed")
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2218:4 @!@!@
+5: Stuttering
+@!@!@ENDMSG 2218 @!@!@
+@!@!@STARTMSG 2267:0 @!@!@
+Finished checking temporal properties in 00s at 2020-04-02 19:39:04
+@!@!@ENDMSG 2267 @!@!@
+@!@!@STARTMSG 2201:0 @!@!@
+The coverage statistics at 2020-04-02 19:39:04
+@!@!@ENDMSG 2201 @!@!@
+@!@!@STARTMSG 2773:0 @!@!@
+<Init line 25, col 1 to line 25, col 4 of module PoolSpec>: 2:2
+@!@!@ENDMSG 2773 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 25, col 9 to line 26, col 44 of module PoolSpec: 2
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2772:0 @!@!@
+<Checkout line 31, col 1 to line 31, col 14 of module PoolSpec>: 5:112
+@!@!@ENDMSG 2772 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 31, col 22 to line 31, col 41 of module PoolSpec: 734
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 31, col 22 to line 31, col 32 of module PoolSpec: 622
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 32, col 22 to line 32, col 67 of module PoolSpec: 112
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 33, col 22 to line 33, col 74 of module PoolSpec: 112
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2772:0 @!@!@
+<Checkin line 41, col 1 to line 41, col 10 of module PoolSpec>: 0:255
+@!@!@ENDMSG 2772 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 41, col 18 to line 41, col 40 of module PoolSpec: 567
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 41, col 18 to line 41, col 28 of module PoolSpec: 312
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 42, col 18 to line 42, col 60 of module PoolSpec: 255
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 43, col 18 to line 43, col 64 of module PoolSpec: 255
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2774:0 @!@!@
+<TypeOK line 18, col 1 to line 18, col 6 of module PoolSpec>
+@!@!@ENDMSG 2774 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 18, col 11 to line 19, col 63 of module PoolSpec: 6
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 18, col 14 to line 18, col 69 of module PoolSpec: 6
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 18, col 35 to line 18, col 69 of module PoolSpec: 18
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 18, col 23 to line 18, col 31 of module PoolSpec: 6
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 19, col 14 to line 19, col 63 of module PoolSpec: 6
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 19, col 35 to line 19, col 63 of module PoolSpec: 12
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 19, col 23 to line 19, col 31 of module PoolSpec: 6
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2774:0 @!@!@
+<ClaimedStateConsistent line 64, col 1 to line 64, col 22 of module PoolSpec>
+@!@!@ENDMSG 2774 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 64, col 27 to line 67, col 91 of module PoolSpec: 6
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 64, col 47 to line 67, col 91 of module PoolSpec: 18
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 64, col 50 to line 65, col 88 of module PoolSpec: 18
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 64, col 53 to line 64, col 75 of module PoolSpec: 18
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 65, col 53 to line 65, col 88 of module PoolSpec: 11
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 65, col 74 to line 65, col 88 of module PoolSpec: 13
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 65, col 62 to line 65, col 70 of module PoolSpec: 11
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 66, col 50 to line 67, col 91 of module PoolSpec: 7
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 66, col 53 to line 66, col 72 of module PoolSpec: 7
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 67, col 53 to line 67, col 91 of module PoolSpec: 7
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 67, col 74 to line 67, col 91 of module PoolSpec: 14
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 67, col 62 to line 67, col 70 of module PoolSpec: 7
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 64, col 36 to line 64, col 44 of module PoolSpec: 6
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2774:0 @!@!@
+<OnlyOneOwner line 72, col 1 to line 72, col 12 of module PoolSpec>
+@!@!@ENDMSG 2774 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 72, col 17 to line 74, col 80 of module PoolSpec: 6
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 73, col 21 to line 74, col 80 of module PoolSpec: 12
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 73, col 42 to line 74, col 80 of module PoolSpec: 24
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 73, col 45 to line 73, col 50 of module PoolSpec: 24
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 74, col 45 to line 74, col 80 of module PoolSpec: 12
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 73, col 31 to line 73, col 39 of module PoolSpec: 12
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 72, col 26 to line 72, col 34 of module PoolSpec: 6
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2202:0 @!@!@
+End of statistics.
+@!@!@ENDMSG 2202 @!@!@
+@!@!@STARTMSG 2200:0 @!@!@
+Progress(4) at 2020-04-02 19:39:04: 26 states generated (796 s/min), 6 distinct states found (183 ds/min), 0 states left on queue.
+@!@!@ENDMSG 2200 @!@!@
+@!@!@STARTMSG 2199:0 @!@!@
+26 states generated, 6 distinct states found, 0 states left on queue.
+@!@!@ENDMSG 2199 @!@!@
+@!@!@STARTMSG 2186:0 @!@!@
+Finished in 1961ms at (2020-04-02 19:39:04)
+@!@!@ENDMSG 2186 @!@!@
